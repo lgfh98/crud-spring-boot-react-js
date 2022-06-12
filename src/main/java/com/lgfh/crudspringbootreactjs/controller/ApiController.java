@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api")
+@CrossOrigin("http://localhost:3000")
 public class ApiController {
 
     private final PersonServiceImpl personService;

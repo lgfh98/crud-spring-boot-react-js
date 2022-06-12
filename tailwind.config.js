@@ -7,6 +7,7 @@ module.exports = {
       sans: ["'Epilogue'", "sans-serif"],
     },
     colors: {
+      error: "#b00020",
       blue: "#1fb6ff",
       purple: "#7e5bef",
       pink: "#ff49db",
@@ -17,6 +18,7 @@ module.exports = {
       gray: "#8492a6",
       "gray-light": "#d3dce6",
       "almost-white": "hsl(0, 0%, 98%)",
+      white: "#fff",
       "medium-gray": "hsl(0, 0%, 41%)",
       "almost-black": "hsl(0, 0%, 8%)",
       overlay: "rgba(0, 0, 0, 0.5)",
