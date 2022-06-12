@@ -2,10 +2,10 @@ package com.lgfh.crudspringbootreactjs.controller;
 
 import com.lgfh.crudspringbootreactjs.domain.Person;
 import com.lgfh.crudspringbootreactjs.serviceimpl.PersonServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(path = "/api")
 public class ApiController {
 
     private final PersonServiceImpl personService;
@@ -20,7 +20,7 @@ public class ApiController {
     }
 
     @PostMapping(path="/person") // Map ONLY POST Requests
-    public @ResponseBody String addPerson (Person person) {
+    public @ResponseBody String addPerson (@RequestBody Person person) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         personService.savePerson(person);
@@ -28,13 +28,13 @@ public class ApiController {
     }
 
     @DeleteMapping(path="/person")
-    public @ResponseBody String deletePerson(Person person){
+    public @ResponseBody String deletePerson(@RequestBody Person person){
         personService.deletePerson(person);
         return "Deleted";
     }
 
     @PutMapping("/person")
-    public @ResponseBody String updatePerson(Person person){
+    public @ResponseBody String updatePerson(@RequestBody Person person){
         personService.savePerson(person);
         return "updated";
     }
