@@ -21,23 +21,20 @@ public class ApiController {
     }
 
     @PostMapping(path="/person") // Map ONLY POST Requests
-    public @ResponseBody String addPerson (@RequestBody Person person) {
+    public @ResponseBody void addPerson (@RequestBody Person person) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         personService.savePerson(person);
-        return "Saved";
     }
 
-    @DeleteMapping(path="/person")
-    public @ResponseBody String deletePerson(@RequestBody Person person){
-        personService.deletePerson(person);
-        return "Deleted";
+    @DeleteMapping(path="/person/{personId}")
+    public @ResponseBody void deletePerson(@PathVariable Long personId){
+        personService.deletePerson(personId);
     }
 
     @PutMapping("/person")
-    public @ResponseBody String updatePerson(@RequestBody Person person){
+    public @ResponseBody void updatePerson(@RequestBody Person person){
         personService.savePerson(person);
-        return "updated";
     }
 
     @GetMapping(path="/persons/{personId}")

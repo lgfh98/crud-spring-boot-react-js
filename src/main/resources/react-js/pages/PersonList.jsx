@@ -1,12 +1,34 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PersonList = () => {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDeletePerson = async (personId) => {
+    let process = await confirm("Are you sure you want to proceed?");
+    if (process) {
+      try {
+        setLoading(true);
+        await fetch(`http://localhost:8080/api/person/${personId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const response = await fetch("http://localhost:8080/api/persons");
+        const data = await response.json();
+        setPeople(data);
+        setLoading(false);
+      } catch (error) {
+        // falta la ui del error
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (person) => {
       setLoading(true);
       try {
         const response = await fetch("http://localhost:8080/api/persons");
@@ -15,6 +37,7 @@ const PersonList = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
+        //falta  manejar la ui del error
       }
     };
     fetchData();
@@ -49,8 +72,20 @@ const PersonList = () => {
                   <td className="px-6 py-4">{email}</td>
                   <td className="px-6 py-4">{phoneNumber}</td>
                   <td className="flex gap-2 px-6 py-4">
-                    <button className="button bg-blue">Edit</button>
-                    <button className="button bg-error">Delete</button>
+                    <button
+                      className="button bg-blue"
+                      onClick={() => {
+                        navigate(`editPerson/${id}`);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="button bg-error"
+                      onClick={() => handleDeletePerson(id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

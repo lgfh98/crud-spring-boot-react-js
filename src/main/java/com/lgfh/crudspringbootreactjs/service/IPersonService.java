@@ -10,7 +10,7 @@ public interface IPersonService {
 
     public void savePerson(Person person);
 
-    public void deletePerson(Person person);
+    public void deletePerson(Long personId);
 
     public Person findPerson(Person person);
 }

@@ -5,6 +5,7 @@ import com.lgfh.crudspringbootreactjs.repository.IPersonRepository;
 import com.lgfh.crudspringbootreactjs.service.IPersonService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class PersonServiceImpl implements IPersonService {
 
     @Override
     @Transactional
-    public void deletePerson(Person person) {
-        personDao.delete(person);
+    public void deletePerson(Long personId) {
+        personDao.deleteById(personId);
     }
 
     @Override

@@ -1,7 +1,10 @@
 import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 const AddPerson = () => {
+  const navigate = useNavigate();
+
   return (
     <Formik
       initialValues={{
@@ -11,15 +14,18 @@ const AddPerson = () => {
         phoneNumber: "",
       }}
       onSubmit={async ({ firstName, lastName, email, phoneNumber }) => {
-        const response = await fetch("http://localhost:8080/api/person", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ firstName, lastName, email, phoneNumber }),
-        });
-        const json = await response.json();
-        // Como esta respondiendo una Cadena desde el metodo Java sale warning en consola de Chrome
+        try {
+          await fetch("http://localhost:8080/api/person", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ firstName, lastName, email, phoneNumber }),
+          });
+          navigate("/");
+        } catch (error) {
+          //falta manejar la ui del error
+        }
       }}
       validationSchema={Yup.object().shape({
         firstName: Yup.string().required("Required"),
