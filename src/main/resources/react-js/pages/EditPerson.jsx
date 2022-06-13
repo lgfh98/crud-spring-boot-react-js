@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 const EditPerson = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
   const [person, setPerson] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
@@ -25,13 +26,19 @@ const EditPerson = () => {
         const data = await response.json();
         setPerson(data);
         setLoading(false);
+        if (data.error) {
+          setError(data.error);
+        }
       } catch (error) {
         setLoading(false);
-        // falta manejar la ui del error
+        setError(error);
       }
     };
     fetchData();
   }, []);
+  if (error) {
+    return "Error";
+  }
   return (
     <>
       {loading ? (
@@ -47,7 +54,7 @@ const EditPerson = () => {
           }}
           onSubmit={async ({ id, firstName, lastName, email, phoneNumber }) => {
             try {
-              await fetch("http://localhost:8080/api/person", {
+              const response = await fetch("http://localhost:8080/api/person", {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
@@ -60,9 +67,14 @@ const EditPerson = () => {
                   phoneNumber,
                 }),
               });
-              navigate("/");
+              const data = response.json();
+              if (data.error) {
+                setError(data.error);
+              } else {
+                navigate("/");
+              }
             } catch (error) {
-              // falta la ui del  error
+              setError(error);
             }
           }}
           validationSchema={Yup.object().shape({

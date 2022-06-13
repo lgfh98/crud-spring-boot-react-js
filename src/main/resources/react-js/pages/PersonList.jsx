@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 const PersonList = () => {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
   const navigate = useNavigate();
 
   const handleDeletePerson = async (personId) => {
@@ -19,29 +20,41 @@ const PersonList = () => {
         });
         const response = await fetch("http://localhost:8080/api/persons");
         const data = await response.json();
-        setPeople(data);
-        setLoading(false);
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setPeople(data);
+          setLoading(false);
+        }
       } catch (error) {
-        // falta la ui del error
+        setError("error");
       }
     }
   };
 
   useEffect(() => {
-    const fetchData = async (person) => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const response = await fetch("http://localhost:8080/api/persons");
         const data = await response.json();
-        setPeople(data);
-        setLoading(false);
+        if (data.error) {
+          setError(error);
+        } else {
+          setPeople(data);
+          setLoading(false);
+        }
       } catch (error) {
         setLoading(false);
-        //falta  manejar la ui del error
+        setError("error");
       }
     };
     fetchData();
   }, []);
+
+  if (error) {
+    return "Error";
+  }
 
   return (
     <>

@@ -3,6 +3,7 @@ package com.lgfh.crudspringbootreactjs.serviceimpl;
 import com.lgfh.crudspringbootreactjs.domain.Person;
 import com.lgfh.crudspringbootreactjs.repository.IPersonRepository;
 import com.lgfh.crudspringbootreactjs.service.IPersonService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,14 +27,14 @@ public class PersonServiceImpl implements IPersonService {
 
     @Override
     @Transactional
-    public void savePerson(Person person) {
-        personDao.save(person);
+    public Person savePerson(Person person) {
+        return personDao.save(person);
     }
 
     @Override
     @Transactional
     public void deletePerson(Long personId) {
-        personDao.deleteById(personId);
+       personDao.deleteById(personId);
     }
 
     @Override

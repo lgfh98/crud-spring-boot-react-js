@@ -1,9 +1,15 @@
 import { Formik } from "formik";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 const AddPerson = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(undefined);
+
+  if (error) {
+    return "Error";
+  }
 
   return (
     <Formik
@@ -15,16 +21,21 @@ const AddPerson = () => {
       }}
       onSubmit={async ({ firstName, lastName, email, phoneNumber }) => {
         try {
-          await fetch("http://localhost:8080/api/person", {
+          const response = await fetch("http://localhost:8080/api/person", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ firstName, lastName, email, phoneNumber }),
           });
-          navigate("/");
+          const data = await response.json();
+          if (data.error) {
+            setError(data.error);
+          } else {
+            navigate("/");
+          }
         } catch (error) {
-          //falta manejar la ui del error
+          setError(error);
         }
       }}
       validationSchema={Yup.object().shape({
